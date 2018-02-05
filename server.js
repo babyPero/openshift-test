@@ -6,6 +6,7 @@ const MongoClient = require('mongodb').MongoClient
 var db
 
 app.use(bodyParser.urlencoded({extended: true}))
+app.set('view engine', 'ejs')
 
     /*
 app.listen(3000, function() {
@@ -20,10 +21,17 @@ app.get('/', function(request, response) {
 */
 
 app.get('/', (req, res) => {
-	res.sendFile(__dirname + '/index.html')
-	    var cursor = db.collection('quotes').find().toArray(function(err, results) {
-		    console.log(results)
-		})
+	//res.sendFile(__dirname + '/index.html')
+	db.collection('quotes').find().toArray(function(err, result) {
+		if (err) return console.log(err)
+			     console.log('------------')
+			     console.log(result)
+			     res.render('index.ejs', {quotes: result})
+			     for(var i=0; i<result.length; i++) {
+				 console.log('name:' + result[i].name)
+				 console.log(result[i].quote)
+			     }
+	    })
     })
 
 app.post('/quotes', (req, res) => {
@@ -43,7 +51,6 @@ MongoClient.connect('mongodb://babyPero:testtest@ds217898.mlab.com:17898/test-pr
 	if (err) return console.log(err)
 		     db = client.db('test-project')
 		     app.listen(3000, () => {
-		     console.log('listening on 3000')
+			     console.log('listening on 3000')
 			 })
-
-	})
+		     })
