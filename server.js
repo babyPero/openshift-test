@@ -20,7 +20,10 @@ app.get('/', function(request, response) {
 */
 
 app.get('/', (req, res) => {
-	    res.sendFile(__dirname + '/index.html')
+	res.sendFile(__dirname + '/index.html')
+	    var cursor = db.collection('quotes').find().toArray(function(err, results) {
+		    console.log(results)
+		})
     })
 
 app.post('/quotes', (req, res) => {
